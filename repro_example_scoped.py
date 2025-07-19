@@ -2,6 +2,9 @@ from nanobind_viser_repro import DummyClass
 
 from viser import ViserServer
 
+def say_hello(event, obj):
+    print(obj)
+
 def main():
     # Create a Viser server with a transform control gizmo.
     server = ViserServer()
@@ -17,9 +20,8 @@ def main():
     dc = DummyClass()
 
     # Set an update callback to the gizmo -- this is what demonstrates the leakage!
-    @controls.on_update
-    def say_hello(_):
-        print(dc)
+    controls.on_update(lambda _: say_hello(_, dc))
+
 
 if __name__ == "__main__":
     main()
